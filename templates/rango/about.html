@@ -3,6 +3,7 @@
 {% block title %}About{% endblock %}
 
 {% block body_block %}
+	<p>This page already received {{ visits }} visits.</p>
 	<a href="{% url 'index' %}">Voltar</a><br />
 	<h1>About Rango!</h1>
 	<h4>{{ about_message }}</h4><br />
