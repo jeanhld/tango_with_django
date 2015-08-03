@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
-{% block title %}Create Page{% endblock %}
-
+{% block title %}Add Page{% endblock %}
 {% block body_block %}
-    <h1>Add a Category</h1>
-    <form id="page_form" method="post" action="{% url 'add_page' category.slug %}">
+
+{% if category %}
+    <form role="form"  id="page_form" method="post" action="{% url 'add_page' category.slug %}">
+        <h2 class="form-signin-heading">Add a Page to <a href="{% url 'category' category.slug %}"> {{ category.name }}</a></h2>
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
@@ -12,9 +12,14 @@
 
         {% for field in form.visible_fields %}
             {{ field.errors }}
-            {{ field.help_text }}
-            {{ field }}
+            {{ field.help_text }}<br/>
+            {{ field }}<br/>
         {% endfor %}
-        <input type="submit" name="submit" value="Create Page" />
+
+        <br/>
+        <button class="btn btn-primary" type="submit" name="submit">Add Page</button>
     </form>
+{%  else %}
+    <p>This is category does not exist.</p>
+{%  endif %}
 {% endblock %}

@@ -5,7 +5,9 @@
 {% block body_block %}
 	<p>This page already received {{ visits }} visits.</p>
 	<a href="{% url 'index' %}">Voltar</a><br />
-	<h1>About Rango!</h1>
+	<div class="page-header">
+		<h1>About Rango!</h1>
+	</div>
 	<h4>{{ about_message }}</h4><br />
 	<img src="{% static "/media/rango.jpg" %}" alt="Picture of Rango" />
 {% endblock %}

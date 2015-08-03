@@ -49,9 +49,9 @@ def add_category(request):
 
 def index(request):
 	category_list = Category.objects.order_by('-likes')[:5]
-	context_dict = {'categories': category_list}
-
+	page_list = Page.objects.order_by('-views')[:5]
 	visits = int(request.COOKIES.get('visits', '1'))
+	context_dict = {'categories': category_list, 'pages': page_list, 'visits': visits}
 
 	reset_last_visit_time = False
 	response = render(request, 'rango/index.html', context_dict)
@@ -76,8 +76,8 @@ def index(request):
 	return response
 
 def about(request):
-	if request.session.get('visits'):
-		count = request.session.get('visits')
+	if request.COOKIES.get('visits'):
+		count = request.COOKIES.get('visits')
 	else:
 		count = 0
 		
