@@ -1,17 +1,10 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load staticfiles %}
-<html>
-	<head>
-		<title>About Rango</title>
-		<!-- <link rel="stylesheet" href="{% static "css/base.css" %}" /> 
-        	<script src="{% static "js/jquery.js" %}"></script> -->
-	</head>
+{% block title %}About{% endblock %}
 
-	<body>
-		<a href="/rango/">Voltar</a><br />
-		<h1>About Rango!</h1>
-		<h4>{{ about_message }}</h4><br />
-		<img src="{% static "/media/rango.jpg" %}" alt="Picture of Rango" />
-	</body>
-
-</html>
+{% block body_block %}
+	<a href="{% url 'index' %}">Voltar</a><br />
+	<h1>About Rango!</h1>
+	<h4>{{ about_message }}</h4><br />
+	<img src="{% static "/media/rango.jpg" %}" alt="Picture of Rango" />
+{% endblock %}
