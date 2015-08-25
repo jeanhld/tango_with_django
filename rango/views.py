@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from django.contrib.auth.models import User
 from datetime import datetime
 
 @login_required
@@ -93,7 +94,14 @@ def category(request, category_name_slug):
 	try:
 		category = Category.objects.get(slug=category_name_slug)
 		context_dict['category_name'] = category.name
-		pages = Page.objects.filter(category=category).order_by('-views')[:5]
+		if request.method == 'POST':
+			search = request.POST.get('search')
+			context_dict['search'] = True
+			pages = Page.objects.filter(category=category, title__contains=search).order_by('-views')
+		else:
+			pages = Page.objects.filter(category=category).order_by('-views')[:5]
+			category.view += 1
+			category.save()
 
 		context_dict['pages'] = pages
 		context_dict['category'] = category
@@ -162,3 +170,41 @@ def user_logout(request):
 	logout(request)
 
 	return HttpResponseRedirect('/rango/')
+
+def goto(request, page_id):
+	try:
+		page = Page.objects.get(id=page_id)
+	except:
+		return HttpResponseRedirect('/rango/')
+
+	page.views += 1
+	page.save()
+	url = page.url
+	
+	return redirect(url)
+
+def add_profile(request):
+	user = request.user
+	if request.method == 'POST':
+		form = UserProfileForm(request.POST)
+		if form.is_valid():
+			if user:
+				user_profile = form.save(commit=False)
+				user_profile.user = user
+				user_profile.save()
+			
+				return index(request)
+		else:
+			print form.errors
+	else:
+		form = UserProfileForm()
+
+	context_dict = {'form':form, 'user': user}
+
+	return render(request, 'rango/profile_registration.html', context_dict)
+
+def profile(request):
+	current_user = request.user
+	user_profile = UserProfile.objects.get(user=current_user)
+	context_dict = {'user': current_user, 'user_profile': user_profile}
+	return render(request, 'rango/profile.html', context_dict)

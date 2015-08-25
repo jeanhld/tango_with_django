@@ -41,6 +41,7 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password')
 
 class UserProfileForm(forms.ModelForm):
+    website = forms.CharField(max_length=250, help_text="Please enter your website")
     class Meta:
         model = UserProfile
         fields = ('website', 'picture')
