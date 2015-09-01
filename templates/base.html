@@ -16,6 +16,12 @@
         <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+        <script src="{% static 'js/rango-jquery.js' %}"></script>
+        <script src="{% static 'js/rango-ajax.js' %}"></script>
+        <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -54,9 +60,19 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
-                    {% block side_block %}
-                        {% get_category_list category %}
-                    {% endblock %}
+                    {% block side_block %} {% get_category_list category %}{% endblock %}
+                    <ul class="nav nav-list">
+                        <li class="nav-header">Find a Category</li>
+                        <form>
+                            <label></label>
+                            <li><input  class="search-query span10 form-control" type="text" name="suggestion" value="" id="suggestion" /></li>
+                        </form>
+                    </ul>
+
+                    <div id="cats">
+                    </div>
+
+
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                     <div>
@@ -69,10 +85,5 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-        <script src="{% static "js/rango-jquery.js" %}"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
     </body>
 </html>

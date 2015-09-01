@@ -208,3 +208,42 @@ def profile(request):
 	user_profile = UserProfile.objects.get(user=current_user)
 	context_dict = {'user': current_user, 'user_profile': user_profile}
 	return render(request, 'rango/profile.html', context_dict)
+
+@login_required
+def like_category(request, category_id):
+	cat_id = None
+	if request.method == 'GET':
+		cat_id = category_id
+
+	likes = 0
+	if cat_id:
+		cat = Category.objects.get(id=int(cat_id))
+		if cat:
+			likes = cat.likes + 1
+			cat.likes =  likes
+			cat.save()
+
+	return HttpResponse(likes)
+
+def suggest_category(request):
+
+	cat_list = []
+	starts_with = ''
+	if request.method == 'GET':
+		starts_with = request.GET['suggestion']
+
+	cat_list = get_category_list(8, starts_with)
+
+	return render(request, 'rango/category_list.html', {'cat_list': cat_list })
+
+
+def get_category_list(max_results=0, starts_with=''):
+	cat_list = []
+	if starts_with:
+		cat_list = Category.objects.filter(name__contains=starts_with)
+
+	if max_results > 0:
+		if len(cat_list) > max_results:
+			cat_list = cat_list[:max_results]
+
+	return cat_list

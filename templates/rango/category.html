@@ -4,9 +4,11 @@
 
 {% block body_block %}
     <div class="page-header">
-        <h1>{{ category_name }}</h1>
+        {% if user.is_authenticated %}
+            <h1>{{ category_name }}<button class="btn btn-primary pull-right like" data-catid="{{category.id}}">Like <i class='glyphicon glyphicon-thumbs-up'></i></button></h1>
+        {% endif %}
     </div>
-
+    <h4>Likes: <span id="like_count">{{ category.likes }} </span></h4>
     {% if user.is_authenticated %}
         <form class="form-inline" id="search_form" method="post" action="{% url 'category'  category.slug %}">
             {% csrf_token %}
@@ -37,7 +39,7 @@
         {% else %}
             {% if search %}
                 <h4>No results :(</h4>
-            <% else %>
+            {% else %}
                 <strong>No pages currently in category.</strong>
             {% endif %}
         {% endif %}
@@ -45,6 +47,7 @@
         The specified category {{ category_name }} does not exist!
     {% endif %}
     {% if user.is_authenticated %}
+        <br>
         <a href="{% url 'add_page' category.slug %}">Add a New Page</a><br />
     {% endif %}
     <h5>views: {{ category.view }}</h5>
