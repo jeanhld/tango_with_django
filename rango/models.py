@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import *
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 class Category(models.Model):
@@ -9,6 +10,8 @@ class Category(models.Model):
 	slug = models.SlugField(unique=True)
 
 	def save(self, *args, **kwargs):
+		if self.view < 0:
+			self.view = 0
 		self.slug = slugify(self.name)
 		super(Category, self).save(*args, **kwargs)
 
